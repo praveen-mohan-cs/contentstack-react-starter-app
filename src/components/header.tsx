@@ -1,36 +1,43 @@
-import React from 'react';
-import { Link, NavLink, useMatch, useResolvedPath } from 'react-router-dom';
-import parse from 'html-react-parser';
-import Tooltip from '../components/too-tip';
-import Skeleton from 'react-loading-skeleton';
+import React from "react";
+import { Link, NavLink, useMatch, useResolvedPath } from "react-router-dom";
+import parse from "html-react-parser";
+import Tooltip from "../components/too-tip";
+import Skeleton from "react-loading-skeleton";
 import { HeaderRes, NavigationMenu } from "../typescript/response";
 
-export default function Header({ header, navMenu }: {header: HeaderRes, navMenu: NavigationMenu[]}) {
+export default function Header({
+  header,
+  navMenu,
+}: {
+  header: HeaderRes;
+  navMenu: NavigationMenu[];
+}) {
   let resolved;
   let match;
 
   return (
-    <header className='header'>
+    <header className="header">
       {Object.keys(header).length ? (
         <div
-          className='note-div'
-          {...header.notification_bar.$?.announcement_text as {}}
+          className="note-div"
+          {...(header.notification_bar.$?.announcement_text as {})}
         >
-          {header.notification_bar.show_announcement && header.notification_bar.announcement_text &&
+          {header.notification_bar.show_announcement &&
+            header.notification_bar.announcement_text &&
             parse(header.notification_bar.announcement_text)}
         </div>
       ) : (
-        <div className='note-div'>
+        <div className="note-div">
           <Skeleton />
         </div>
       )}
-      <div className='max-width header-div'>
-        <div className='wrapper-logo'>
+      <div className="max-width header-div">
+        <div className="wrapper-logo">
           {header.logo ? (
-            <Link to='/' title='Contentstack'>
+            <Link to="/" title="Contentstack">
               <img
-                {...header.logo.$?.url as {}}
-                className='logo'
+                {...(header.logo.$?.url as {})}
+                className="logo"
                 src={header.logo.url}
                 alt={header.logo.filename}
               />
@@ -41,23 +48,25 @@ export default function Header({ header, navMenu }: {header: HeaderRes, navMenu:
             </a>
           )}
         </div>
-        <input className='menu-btn' type='checkbox' id='menu-btn' />
-        <label className='menu-icon' htmlFor='menu-btn'>
-          <span className='navicon' />
+        <input className="menu-btn" type="checkbox" id="menu-btn" />
+        <label className="menu-icon" htmlFor="menu-btn">
+          <span className="navicon" />
         </label>
-        <nav className='menu'>
-          <ul className='nav-ul header-ul'>
+        <nav className="menu">
+          <ul className="nav-ul header-ul">
             {navMenu.length ? (
               navMenu?.map((list) => (
-                <li key={list.label} className='nav-li'>
+                <li key={list.label} className="nav-li">
                   {
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
                     ((resolved = useResolvedPath(list.page_reference[0].url)),
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
                     (match = useMatch({ path: resolved.pathname, end: true })),
                     (
                       <NavLink
-                        {...list.$?.label as {}}
+                        {...(list.$?.label as {})}
                         to={list.page_reference[0].url}
-                        className={match ? 'active' : ''}
+                        className={match ? "active" : ""}
                       >
                         {list.label}
                       </NavLink>
@@ -68,16 +77,22 @@ export default function Header({ header, navMenu }: {header: HeaderRes, navMenu:
             ) : (
               <li>
                 <a>
-                  <Skeleton width={400}/>
+                  <Skeleton width={400} />
                 </a>
               </li>
             )}
           </ul>
         </nav>
-        <div className='json-preview'>
-          <Tooltip content='JSON Preview' direction='top' dynamic={false} delay={200} status={0}>
-            <span data-bs-toggle='modal' data-bs-target='#staticBackdrop'>
-              <img src='/json.svg' alt='JSON Preview icon' />
+        <div className="json-preview">
+          <Tooltip
+            content="JSON Preview"
+            direction="top"
+            dynamic={false}
+            delay={200}
+            status={0}
+          >
+            <span data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+              <img src="/json.svg" alt="JSON Preview icon" />
             </span>
           </Tooltip>
         </div>
